@@ -14,17 +14,19 @@ import java.io.InputStream
 import kotlin.collections.ArrayList
 
 class MainViewModel : ViewModel() {
+
     val TAG = this.javaClass.name
 
     var setUpChart: MutableLiveData<ChartData> = MutableLiveData()
     var addNewData: MutableLiveData<ChartDataEntity> = MutableLiveData()
-    var list: MutableList<DisplayData> = mutableListOf()
-    val entries: ArrayList<Entry> = ArrayList()
-    val labels: ArrayList<String> = ArrayList()
+
+    private val entries: ArrayList<Entry> = ArrayList()
+    private val labels: ArrayList<String> = ArrayList()
     private val oldData = arrayListOf<Entry>()
+
     @DelicateCoroutinesApi
     fun getDataFromSheet(fileInputStream: InputStream) {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(IO) {
             try {
                 val workbook = XSSFWorkbook(fileInputStream)
                 val sheet = workbook.getSheetAt(0)
@@ -49,7 +51,6 @@ class MainViewModel : ViewModel() {
                 if (row.getCell(1) != null) {
                     val price = row.getCell(1).toString().toFloat()
                     val date = row.getCell(0).toString()
-                    list.add(DisplayData(date, price))
                     labels.add(date)
                     oldData.add(Entry(row.getRowNum().toFloat(), price))
                     entries.add(Entry(row.getRowNum().toFloat(), price))
@@ -68,7 +69,7 @@ class MainViewModel : ViewModel() {
     var h = 0
     private fun getDataPerSecond() {
         CoroutineScope(IO).launch {
-            Log.e("after 5 sec", h.toString())
+            Log.e("after 5 sec",""+ h)
             if ( oldData.isNotEmpty() && h <= oldData.size) {
                 val chartDataEntity = ChartDataEntity(entries = oldData.get(h), labels = "price")
                 addNewData.postValue(chartDataEntity)
