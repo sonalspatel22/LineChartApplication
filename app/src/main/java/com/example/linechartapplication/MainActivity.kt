@@ -1,12 +1,8 @@
 package com.example.linechartapplication
 
-import android.R.attr
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -51,9 +47,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setUpChart(lineEntries: List<Entry>, labels: Array<String>?) {
-        Log.e("list", "" + lineEntries)
-        Log.e("labels", "" + labels)
-//        val lineDataSet = LineDataSet(lineEntries.subList(0, 2), "Price")
         lineDataSet = LineDataSet(lineEntries, "Price")
         lineData = LineData(lineDataSet)
         lineChart!!.data = lineData
@@ -62,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         lineDataSet.valueTextSize = 5f
         lineChart!!.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         lineChart!!.invalidate()
-
         mainViewModel.clearCurrentChartData()
     }
 
